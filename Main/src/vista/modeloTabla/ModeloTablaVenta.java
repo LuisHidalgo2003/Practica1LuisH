@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package modelo;
+package vista.modeloTabla;
 
 /**
  *
  * @author peluche
  */
-public enum  EnumMes {
-    ENERO,FEBRERO,MARZO,ABRIL,MAYO,JUNIO,JULIO,AGOSTO,SEPTIEMBRE,NOVIEMBRE,DICIEMBRE
+public class ModeloTablaVenta {
+    
 }
-

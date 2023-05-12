@@ -5,11 +5,20 @@
  */
 package vista;
 
+import controlador.SucursalController;
+import controlador.exception.SpaceException;
+import javax.swing.JOptionPane;
+import vista.modeloTabla.ModeloTablaSucursal;
+
 /**
  *
  * @author peluche
  */
 public class FrmSucursal extends javax.swing.JDialog {
+
+
+    private SucursalController control = new SucursalController();
+    private ModeloTablaSucursal modelo = new ModeloTablaSucursal();
 
     /**
      * Creates new form FrmSucursal
@@ -17,7 +26,35 @@ public class FrmSucursal extends javax.swing.JDialog {
     public FrmSucursal(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        limpiar();
     }
+
+    private void cargarTabla() {
+        modelo.set(control.getLista());
+        tblTabla.setModel(modelo);
+        tblTabla.updateUI();
+    }
+
+    private void limpiar() {
+        this.control.setSucursal(null);
+        txtNombre.setText("");
+        cargarTabla();
+    }
+
+    private void guardar() throws SpaceException {
+        if (!txtNombre.getText().trim().isEmpty()) {
+            this.control.getSucursal().setNombre(txtNombre.getText());
+            control.registrar();
+            limpiar();
+            JOptionPane.showMessageDialog(null, "Guardado con exito", "Ok", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "Llene los campos", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    /**
+     * Creates new form FrmSucursal
+     */
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,13 +68,13 @@ public class FrmSucursal extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        txtNombre = new javax.swing.JTextField();
+        btnGuardar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
+        tblTabla = new javax.swing.JTable();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -53,20 +90,20 @@ public class FrmSucursal extends javax.swing.JDialog {
         jLabel2.setText("NOMBRE=");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 80, -1, -1));
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtNombreActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, 310, -1));
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, 310, -1));
 
-        jButton1.setText("✅");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar.setText("✅");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 70, 30, 40));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 70, 30, 40));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(27, 36, 660, 140));
 
@@ -77,7 +114,7 @@ public class FrmSucursal extends javax.swing.JDialog {
         jPanel3.setForeground(new java.awt.Color(41, 163, 203));
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tblTabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -88,34 +125,41 @@ public class FrmSucursal extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tblTabla);
 
         jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 630, 260));
 
         getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 200, 660, 320));
 
-        jButton2.setText("VENTAS 💵");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButton1.setText("VENTAS 💵");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 530, 100, 40));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 530, 100, 40));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+        
+    }//GEN-LAST:event_txtNombreActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            guardar();
+        } catch (SpaceException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -160,15 +204,15 @@ public class FrmSucursal extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable tblTabla;
+    private javax.swing.JTextField txtNombre;
     // End of variables declaration//GEN-END:variables
 }
